@@ -1,0 +1,738 @@
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clan Devs</title>
+  <style>
+    /* =========================================
+       Design Tokens & Base Theme
+       ========================================= */
+    :root {
+      --bg: #0b1220;
+      --panel: #121d31;
+      --panel2: #182640;
+      --text: #edf3ff;
+      --muted: #9fb0ca;
+      --line: #293a57;
+      --gold: #f5c451;
+      --green: #54d69a;
+      --red: #ff7777;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0b1220, #111c30);
+      color: var(--text);
+      font: 15px system-ui, -apple-system, Segoe UI, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* =========================================
+       Header & Auth Control Bar
+       ========================================= */
+    header {
+      padding: 24px 18px 16px;
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .header-brand h1 {
+      margin: 0;
+      font-size: 27px;
+      letter-spacing: -0.01em;
+    }
+
+    .header-brand p {
+      color: var(--muted);
+      margin: 6px 0 0;
+    }
+
+    .tag {
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+
+    .auth-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      background: var(--panel2);
+      color: var(--muted);
+    }
+
+    .badge.admin {
+      border-color: rgba(84, 214, 154, 0.4);
+      background: rgba(84, 214, 154, 0.12);
+      color: var(--green);
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* =========================================
+       Main Layout & Navigation Tabs
+       ========================================= */
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 18px 48px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 8px 0 18px;
+    }
+
+    button, .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: var(--panel2);
+      color: var(--text);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 650;
+      cursor: pointer;
+      transition: transform 0.12s ease, opacity 0.15s ease, background 0.15s ease;
+    }
+
+    button:hover:not(:disabled) {
+      filter: brightness(1.1);
+    }
+
+    button:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    button.active, .primary {
+      background: var(--gold);
+      color: #211a08;
+    }
+
+    .danger {
+      background: #492b38;
+      color: #ffd8df;
+    }
+
+    .tab {
+      border: 1px solid var(--line);
+    }
+
+    .tab.active {
+      border-color: var(--gold);
+    }
+
+    /* =========================================
+       Panels, Grids, Forms & Tables
+       ========================================= */
+    .panel {
+      background: rgba(18, 29, 49, 0.96);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+    }
+
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #0c1729;
+      color: var(--text);
+      font: inherit;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--gold);
+    }
+
+    textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin: 0 0 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat {
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      padding: 14px;
+      border-radius: 12px;
+    }
+
+    .stat b {
+      display: block;
+      font-size: 23px;
+      color: var(--text);
+    }
+
+    .stat span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 650px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 11px 9px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    tbody tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .tablewrap {
+      overflow-x: auto;
+    }
+
+    .empty {
+      color: var(--muted);
+      padding: 24px;
+      text-align: center;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .row h2 {
+      margin: 0;
+    }
+
+    .viewer-notice {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(24, 38, 64, 0.65);
+      border: 1px dashed var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .status-cwl {
+      background: rgba(84, 214, 154, 0.14);
+      color: var(--green);
+    }
+
+    .status-res {
+      background: rgba(245, 196, 81, 0.14);
+      color: var(--gold);
+    }
+
+    .status-prac {
+      background: rgba(159, 176, 202, 0.14);
+      color: var(--muted);
+    }
+
+    /* =========================================
+       Modals (Auth & Confirmation)
+       ========================================= */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 10, 20, 0.78);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 1000;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 430px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .close-btn {
+      background: transparent;
+      color: var(--muted);
+      padding: 4px 10px;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .modal-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .modal-tabs button {
+      border: 1px solid var(--line);
+    }
+
+    .error-msg {
+      background: rgba(255, 119, 119, 0.12);
+      border: 1px solid rgba(255, 119, 119, 0.35);
+      color: var(--red);
+      padding: 10px 12px;
+      border-radius: 9px;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .info-msg {
+      background: rgba(245, 196, 81, 0.1);
+      border: 1px solid rgba(245, 196, 81, 0.3);
+      color: var(--gold);
+      padding: 10px 12px;
+      border-radius: 9px;
+      font-size: 12px;
+      margin-bottom: 12px;
+      line-height: 1.45;
+    }
+
+    /* =========================================
+       Toast Notifications
+       ========================================= */
+    .toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 2000;
+      max-width: calc(100vw - 40px);
+    }
+
+    .toast {
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      animation: slideIn 0.2s ease;
+    }
+
+    .toast.success { border-left: 4px solid var(--green); }
+    .toast.error { border-left: 4px solid var(--red); }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .header-brand h1 {
+        font-size: 23px;
+      }
+      .panel {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================
+       Header with Admin Auth Controls
+       ========================================= -->
+  <header>
+    <div class="header-brand">
+      <div class="tag">⚔ CLAN MANAGEMENT</div>
+      <h1>Clan Trial HQ</h1>
+      <p>Friendly War Performance Tracker · CWL Selection</p>
+    </div>
+
+    <div class="auth-bar" id="authBar">
+      <span class="badge" id="roleBadge">
+        <span class="badge-dot"></span>
+        <span id="roleBadgeText">Viewer Mode</span>
+      </span>
+      <button class="primary" id="openAuthBtn">Admin Sign In / Sign Up</button>
+      <button class="hidden" id="signOutBtn">Sign Out</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="dashboard">Dashboard</button>
+      <button class="tab" data-tab="players">Players</button>
+      <button class="tab" data-tab="attacks">Attack Log</button>
+    </div>
+
+    <!-- =========================================
+         1. DASHBOARD TAB
+         ========================================= -->
+    <section id="dashboard">
+      <div class="stats">
+        <div class="stat"><b id="sPlayers">0</b><span>Players</span></div>
+        <div class="stat"><b id="sAttacks">0</b><span>Attacks logged</span></div>
+        <div class="stat"><b id="sStars">0</b><span>Total stars</span></div>
+        <div class="stat"><b id="sAvg">0</b><span>Average score</span></div>
+      </div>
+
+      <div class="panel">
+        <div class="row">
+          <h2>🏆 Player leaderboard</h2>
+          <div class="actions">
+            <button id="leaderPdfBtn">Export leaderboard PDF</button>
+            <span class="hint">Ranked by average attack score</span>
+          </div>
+        </div>
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Player</th>
+                <th>Attacks</th>
+                <th>Stars</th>
+                <th>3★ rate</th>
+                <th>Avg %</th>
+                <th>Avg score</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard">
+              <tr><td colspan="8" class="empty">Connecting to live clan data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Scoring guide</h2>
+        <div class="hint">
+          Each attack is scored out of 100: Stars (50) + Destruction (30) + Execution (20). Stars: 3★=50, 2★=35, 1★=15, 0★=0. Destruction: 3 points per complete 10% (maximum 30). Execution is entered by the evaluator: 0, 5, 10, 15 or 20.
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         2. PLAYERS TAB
+         ========================================= -->
+    <section id="players" class="hidden">
+      <!-- Viewer Mode Notice -->
+      <div class="viewer-notice" id="playersViewerNotice">
+        <span>🔒 Viewer Mode — Admin login is required to add or remove clan members.</span>
+        <button class="primary" onclick="openAuthModal('signin')">Admin Sign In</button>
+      </div>
+
+      <!-- Admin-only Add Player Panel -->
+      <div class="panel hidden" id="addPlayerPanel">
+        <h2>Add clan member</h2>
+        <form id="playerForm">
+          <div class="grid">
+            <div class="field">
+              <label for="pName">Player name</label>
+              <input id="pName" required placeholder="In-game name">
+            </div>
+          </div>
+          <button type="submit" class="primary" id="addPlayerSubmit">Add player</button>
+        </form>
+      </div>
+
+      <!-- Clan Roster Panel -->
+      <div class="panel">
+        <div class="row">
+          <h2>Clan roster</h2>
+          <button class="danger hidden" id="clearPlayers">Clear all players</button>
+        </div>
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Player</th>
+                <th id="playersActionHeader" class="hidden">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="playersTable">
+              <tr><td colspan="2" class="empty">No players added yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         3. ATTACK LOG TAB
+         ========================================= -->
+    <section id="attacks" class="hidden">
+      <!-- Viewer Mode Notice -->
+      <div class="viewer-notice" id="attacksViewerNotice">
+        <span>🔒 Viewer Mode — Admin login is required to record or delete attack logs.</span>
+        <button class="primary" onclick="openAuthModal('signin')">Admin Sign In</button>
+      </div>
+
+      <!-- Admin-only Record Attack Panel -->
+      <div class="panel hidden" id="recordAttackPanel">
+        <h2>Record an attack</h2>
+        <form id="attackForm">
+          <div class="grid">
+            <div class="field">
+              <label for="aPlayer">Player</label>
+              <select id="aPlayer" required></select>
+            </div>
+            <div class="field">
+              <label for="aWar">Friendly war number</label>
+              <select id="aWar">
+                <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="aNo">Attack number</label>
+              <select id="aNo">
+                <option>1</option><option>2</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="aDiff">Target difficulty</label>
+              <select id="aDiff">
+                <option>Medium</option><option>Easy</option><option>Hard</option><option>Very Hard</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="aStars">Stars</label>
+              <select id="aStars">
+                <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="aPercent">Destruction %</label>
+              <input id="aPercent" type="number" min="0" max="100" required placeholder="e.g. 87">
+            </div>
+            <div class="field">
+              <label for="aExec">Execution score</label>
+              <select id="aExec">
+                <option value="20">20 · Excellent</option>
+                <option value="15">15 · Good</option>
+                <option value="10">10 · Average</option>
+                <option value="5">5 · Poor</option>
+                <option value="0">0 · Failed</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="aStrategy">Attack strategy</label>
+              <input id="aStrategy" placeholder="e.g. Root Riders">
+            </div>
+          </div>
+          <div class="field">
+            <label for="aNotes">Notes / mistakes / positives</label>
+            <textarea id="aNotes" placeholder="Funnel issue, spell timing, clean attack..."></textarea>
+          </div>
+          <button type="submit" class="primary" id="saveAttackSubmit">Save attack record</button>
+          <p class="hint" style="margin-top:10px;">For a missed attack, record 0 stars, 0%, and 0 execution so reliability is reflected.</p>
+        </form>
+      </div>
+
+      <!-- Attack History Panel -->
+      <div class="panel">
+        <div class="row">
+          <h2>Attack history</h2>
+          <div class="actions">
+            <button id="exportBtn">Export CSV</button>
+            <button id="attackPdfBtn">Export attack log PDF</button>
+            <button id="fullPdfBtn">Full report PDF</button>
+          </div>
+        </div>
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Player</th>
+                <th>War</th>
+                <th>Attack</th>
+                <th>Stars</th>
+                <th>Destruction</th>
+                <th>Strategy</th>
+                <th>Score</th>
+                <th>Notes</th>
+                <th id="attacksActionHeader" class="hidden"></th>
+              </tr>
+            </thead>
+            <tbody id="attackTable">
+              <tr><td colspan="9" class="empty">No attacks recorded yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <p class="hint">
+      Data is synced live to the cloud across all devices. Anyone can view the leaderboard and attack history in real time, while only signed-in Admins can add or edit records.
+    </p>
+  </main>
+
+  <!-- =========================================
+       Admin Auth Modal (Sign In / Sign Up)
+       ========================================= -->
+  <div class="modal-backdrop hidden" id="authModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+      <div class="modal-header">
+        <h3 id="authModalTitle">Admin Access</h3>
+        <button class="close-btn" id="closeAuthModal" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="modal-tabs">
+        <button id="tabSignIn" class="active">Admin Sign In</button>
+        <button id="tabSignUp">Admin Sign Up</button>
+      </div>
+
+      <div id="authError" class="error-msg hidden"></div>
+
+      <!-- Sign In Form -->
+      <form id="signInForm">
+        <div class="field">
+          <label for="siEmail">Admin Email</label>
+          <input id="siEmail" type="email" required placeholder="leader@clan.com">
+        </div>
+        <div class="field">
+          <label for="siPassword">Password</label>
+          <input id="siPassword" type="password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="primary" style="width:100%;" id="siSubmitBtn">Sign In as Admin</button>
+      </form>
+
+      <!-- Sign Up Form -->
+      <form id="signUpForm" class="hidden">
+        <div id="firstAdminNotice" class="info-msg hidden">
+          🛡 First-time setup: No Clan Admin exists yet. Register the primary Admin account below and optionally set a Clan Admin Invite Code for future co-leaders.
+        </div>
+        <div class="field">
+          <label for="suEmail">Admin Email</label>
+          <input id="suEmail" t
